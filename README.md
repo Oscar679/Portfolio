@@ -1,6 +1,6 @@
 # Oscar Ekberg — Portfolio
 
-Personal portfolio website built with React and Vite. Features a dark glassmorphism design with smooth animations and a developer-focused aesthetic.
+Personal portfolio website for Oscar Ekberg, a full-stack developer based in Växjö, Sweden. Built with React and Vite, featuring a dark glassmorphism design with smooth animations.
 
 ## Live Site
 
@@ -8,15 +8,17 @@ Personal portfolio website built with React and Vite. Features a dark glassmorph
 
 ## Features
 
-- Particle canvas hero with mouse interaction and parallax scroll
-- Typing animation cycling through roles
+- Particle canvas hero with mouse/touch repulsion and parallax scroll
+- Typing animation cycling through developer roles
 - Scroll reveal animations with staggered entrance
 - Skill tags with brand icon colors and glow effects
 - Project cards with colored hover glow
 - Active nav link tracking via IntersectionObserver
-- Mobile-responsive with hamburger menu
+- Mobile hamburger menu
 - Scroll progress bar and scroll-to-top button
 - Copy email to clipboard
+- Web Share API for mobile sharing
+- Haptic feedback on interactive elements
 - Page load animation
 
 ## Tech Stack

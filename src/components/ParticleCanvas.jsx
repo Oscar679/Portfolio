@@ -1,114 +1,153 @@
-import { useEffect, useRef } from 'react'
-
-const PARTICLE_COUNT = 80
-const CONNECTION_DISTANCE = 130
-const MOUSE_REPEL_RADIUS = 120
-const MOUSE_REPEL_FORCE = 4
+import { useEffect, useRef } from "react"
 
 export default function ParticleCanvas() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    let animId
-    const mouse = { x: -9999, y: -9999 }
+    const ctx = canvas.getContext("2d")
+    const section = canvas.parentElement
 
-    const resize = () => {
-      canvas.width = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
+    const DPR = window.devicePixelRatio || 1
 
-    const onMouseMove = (e) => {
+    let width = 0
+    let height = 0
+    let particles = []
+    let animationFrame
+    let pointer = { x: null, y: null }
+
+    const PARTICLE_COUNT = 70
+    const MAX_DIST = 120
+    const REPEL_RADIUS = 110
+    const REPEL_FORCE = 2.5
+
+    function resize() {
       const rect = canvas.getBoundingClientRect()
-      mouse.x = e.clientX - rect.left
-      mouse.y = e.clientY - rect.top
+      width = rect.width
+      height = rect.height
+      canvas.width = width * DPR
+      canvas.height = height * DPR
+      canvas.style.width = width + "px"
+      canvas.style.height = height + "px"
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0)
     }
-    const onMouseLeave = () => { mouse.x = -9999; mouse.y = -9999 }
-    canvas.addEventListener('mousemove', onMouseMove)
-    canvas.addEventListener('mouseleave', onMouseLeave)
 
-    // Init particles
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 1.5 + 0.5,
-    }))
+    function createParticles() {
+      particles = []
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 2 + 0.6
+        })
+      }
+    }
 
-    const getColor = () =>
-      document.documentElement.classList.contains('light')
-        ? { r: 6, g: 120, b: 180 }   // deeper cyan-blue for light bg
-        : { r: 103, g: 232, b: 249 }  // cyan-300 for dark bg
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height)
 
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const { r, g, b } = getColor()
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
 
-      for (const p of particles) {
-        // Mouse repulsion
-        const dx = p.x - mouse.x
-        const dy = p.y - mouse.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < MOUSE_REPEL_RADIUS) {
-          const force = (MOUSE_REPEL_RADIUS - dist) / MOUSE_REPEL_RADIUS
-          p.x += (dx / dist) * force * MOUSE_REPEL_FORCE
-          p.y += (dy / dist) * force * MOUSE_REPEL_FORCE
+        // Pointer repulsion (mouse + touch)
+        if (pointer.x !== null) {
+          const dx = p.x - pointer.x
+          const dy = p.y - pointer.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < REPEL_RADIUS && dist > 0) {
+            const force = (REPEL_RADIUS - dist) / REPEL_RADIUS * REPEL_FORCE
+            p.vx += (dx / dist) * force
+            p.vy += (dy / dist) * force
+          }
         }
 
-        // Move
+        // Dampen & clamp
+        p.vx *= 0.98
+        p.vy *= 0.98
+        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy)
+        if (speed > 3) { p.vx = (p.vx / speed) * 3; p.vy = (p.vy / speed) * 3 }
+
         p.x += p.vx
         p.y += p.vy
 
-        // Bounce off walls
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1
+        if (p.x < 0 || p.x > width) p.vx *= -1
+        if (p.y < 0 || p.y > height) p.vy *= -1
 
-        // Draw dot
         ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.6)`
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = "rgba(0, 255, 255, 0.7)"
         ctx.fill()
-      }
 
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
+          const p2 = particles[j]
+          const dx = p.x - p2.x
+          const dy = p.y - p2.y
           const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < CONNECTION_DISTANCE) {
-            const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.3
+          if (dist < MAX_DIST) {
+            const opacity = 1 - dist / MAX_DIST
             ctx.beginPath()
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
-            ctx.lineWidth = 0.8
+            ctx.moveTo(p.x, p.y)
+            ctx.lineTo(p2.x, p2.y)
+            ctx.strokeStyle = `rgba(0,255,255,${opacity * 0.25})`
+            ctx.lineWidth = 1
             ctx.stroke()
           }
         }
       }
 
-      animId = requestAnimationFrame(draw)
+      animationFrame = requestAnimationFrame(drawParticles)
     }
 
-    draw()
+    // Mouse events
+    const onMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect()
+      pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    }
+    const onMouseLeave = () => { pointer = { x: null, y: null } }
+
+    // Touch events (passive — won't block scroll)
+    const onTouchMove = (e) => {
+      const rect = canvas.getBoundingClientRect()
+      const t = e.touches[0]
+      pointer = { x: t.clientX - rect.left, y: t.clientY - rect.top }
+    }
+    const onTouchEnd = () => { pointer = { x: null, y: null } }
+
+    section.addEventListener('mousemove', onMouseMove)
+    section.addEventListener('mouseleave', onMouseLeave)
+    section.addEventListener('touchmove', onTouchMove, { passive: true })
+    section.addEventListener('touchend', onTouchEnd)
+
+    resize()
+    createParticles()
+    drawParticles()
+
+    let lastWidth = width
+    window.addEventListener("resize", () => {
+      const newWidth = canvas.getBoundingClientRect().width
+      resize()
+      if (Math.abs(newWidth - lastWidth) > 10) {
+        createParticles()
+        lastWidth = newWidth
+      }
+    })
 
     return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', resize)
-      canvas.removeEventListener('mousemove', onMouseMove)
-      canvas.removeEventListener('mouseleave', onMouseLeave)
+      cancelAnimationFrame(animationFrame)
+      window.removeEventListener("resize", resize)
+      section.removeEventListener('mousemove', onMouseMove)
+      section.removeEventListener('mouseleave', onMouseLeave)
+      section.removeEventListener('touchmove', onTouchMove)
+      section.removeEventListener('touchend', onTouchEnd)
     }
   }, [])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
+      className="absolute inset-0 w-full h-full pointer-events-none"
     />
   )
 }

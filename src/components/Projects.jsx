@@ -5,7 +5,7 @@ const projects = [
   {
     title: 'GeoGuessr Clone',
     description:
-      'Full-stack web application with a Slim 4 backend and vanilla JS frontend using web components and Tailwind CSS. Designed REST APIs for game logic and scoring, integrated map data, and implemented database-driven authentication and persistence.',
+      'Full-stack web application with a Slim 4 REST API backend and vanilla JS frontend using web components. Features a MySQL database with full CRUD operations for game state, scores, and user authentication.',
     tags: ['Slim 4', 'Vanilla JS', 'Web Components', 'Tailwind', 'MySQL'],
     href: 'https://github.com/Oscar679/Web-Technology-6---GeoGuessr-Clone',
     accent: 'from-cyan-500/20 to-blue-500/10',
@@ -15,8 +15,8 @@ const projects = [
   {
     title: 'ClimateBot',
     description:
-      'IoT-based system collecting temperature and humidity data from real sensors in my apartment. Built a visualization interface to present historical trends and live readings.',
-    tags: ['Python', 'IoT', 'Data Viz', 'Sensors'],
+      'IoT system that fetches real-time climate data from sensors into Google Sheets via a custom Python API. Processes and visualizes historical trends and live readings from my apartment.',
+    tags: ['Python', 'IoT', 'REST API', 'Google Sheets', 'Data Viz'],
     href: 'https://github.com/Oscar679/iot_project',
     accent: 'from-teal-500/20 to-cyan-500/10',
     dot: 'bg-teal-400',

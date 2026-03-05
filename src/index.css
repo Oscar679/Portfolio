@@ -144,3 +144,37 @@ html { scroll-behavior: smooth; }
   background-size: 200% 200%;
   animation: gradient-shift 5s ease infinite;
 }
+
+/* ── Scroll hint mouse ── */
+.scroll-hint { animation: fade-up 1s ease 1.2s both; }
+
+.scroll-mouse {
+  width: 22px;
+  height: 34px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+}
+
+.scroll-dot {
+  width: 4px;
+  height: 7px;
+  background: rgba(103, 232, 249, 0.7);
+  border-radius: 2px;
+  animation: scroll-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-dot {
+  0%   { transform: translateY(0); opacity: 1; }
+  60%  { transform: translateY(10px); opacity: 0; }
+  61%  { transform: translateY(0); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Mobile font scaling ── */
+@media (max-width: 640px) {
+  h1 { line-height: 1.05; }
+  .reveal-section { transform: translateY(20px); }
+}

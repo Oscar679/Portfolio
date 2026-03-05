@@ -14,7 +14,7 @@ const links = [
   },
   {
     label: 'LinkedIn',
-    value: 'oscar-ekberg',
+    value: 'Oscar Ekberg',
     href: 'https://www.linkedin.com/in/oscar-ekberg-127833250/',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -24,8 +24,8 @@ const links = [
   },
   {
     label: 'Email',
-    value: 'oscar@example.com',
-    href: 'mailto:oscar@example.com',
+    value: 'oscarekberg@hotmail.com',
+    href: 'mailto:oscarekberg@hotmail.com',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -42,9 +42,15 @@ export default function Contact() {
   const handleEmailClick = async (e, label, value) => {
     if (label !== 'Email') return
     e.preventDefault()
+    navigator.vibrate?.(50)
     await navigator.clipboard.writeText(value)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleShare = async () => {
+    navigator.vibrate?.(50)
+    await navigator.share({ title: 'Oscar Ekberg', text: 'Check out Oscar\'s portfolio', url: 'https://oscarekberg.com' })
   }
 
   return (
@@ -55,7 +61,7 @@ export default function Contact() {
         Open to new opportunities, collaborations, or just a good conversation about tech. Feel free to reach out.
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
         {links.map(({ label, value, href, icon }) => (
           <a
             key={label}
@@ -74,6 +80,23 @@ export default function Contact() {
             </div>
           </a>
         ))}
+
+        {'share' in navigator && (
+          <button
+            onClick={handleShare}
+            className="group glass-card flex items-center gap-3 px-6 py-4 rounded-2xl hover:border-cyan-400/30 transition-all cursor-pointer"
+          >
+            <span className="text-muted group-hover:text-cyan-400 transition-colors">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-faint text-xs font-mono">Share</p>
+              <p className="text-primary text-sm group-hover:text-cyan-400 transition-colors">Share portfolio</p>
+            </div>
+          </button>
+        )}
       </div>
 
       <div className="mt-24 pt-8 border-t border-card text-faint text-sm flex justify-between">

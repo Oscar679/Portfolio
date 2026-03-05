@@ -1,16 +1,43 @@
-# React + Vite
+# Oscar Ekberg — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio website built with React and Vite. Features a dark glassmorphism design with smooth animations and a developer-focused aesthetic.
 
-Currently, two official plugins are available:
+## Live Site
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[oscarekberg.com](https://oscarekberg.com)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Particle canvas hero with mouse interaction and parallax scroll
+- Typing animation cycling through roles
+- Scroll reveal animations with staggered entrance
+- Skill tags with brand icon colors and glow effects
+- Project cards with colored hover glow
+- Active nav link tracking via IntersectionObserver
+- Mobile-responsive with hamburger menu
+- Scroll progress bar and scroll-to-top button
+- Copy email to clipboard
+- Page load animation
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React 19** + **Vite 7**
+- **Tailwind CSS v4**
+- **react-icons**
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
+```
+
+## Build & Deploy
+
+```bash
+npm run build   # outputs to dist/
+```
+
+Deploy to Netlify:
+- Build command: `npm run build`
+- Publish directory: `dist`

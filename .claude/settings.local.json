@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo $PATH)",
+      "Bash(cmd.exe /c \"where claude\")",
+      "Bash(cmd.exe /c \"where claude-code\")",
+      "Bash(git clone --depth=1 https://github.com/google-labs-code/stitch-skills \"/c/Users/oscar/.claude/plugins/stitch-skills\")",
+      "Bash(npm install react-icons)"
+    ]
+  }
+}

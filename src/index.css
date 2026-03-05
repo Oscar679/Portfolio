@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ── Theme variables ── */
+:root {
+  --bg: #04080f;
+  --text-primary: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-faint: rgba(255, 255, 255, 0.2);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --nav-bg: rgba(255, 255, 255, 0.05);
+  --btn-outline-border: rgba(255, 255, 255, 0.2);
+  --btn-outline-text: rgba(255, 255, 255, 0.8);
+  --btn-outline-hover-border: rgba(255, 255, 255, 0.4);
+  --tag-bg: rgba(255, 255, 255, 0.05);
+  --tag-border: rgba(255, 255, 255, 0.1);
+  --tag-text: rgba(255, 255, 255, 0.5);
+}
+
+html { scroll-behavior: smooth; }
+
+/* ── Site root ── */
+.site-root {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* ── Semantic color utilities ── */
+.text-primary  { color: var(--text-primary); }
+.text-muted    { color: var(--text-muted); }
+.text-faint    { color: var(--text-faint); }
+
+/* ── Glass card ── */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ── Border utilities ── */
+.border-card { border-color: var(--card-border); }
+.border-t.border-card { border-top-color: var(--card-border); }
+
+/* ── Tag (small badge) ── */
+.tag {
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  color: var(--tag-text);
+}
+
+/* ── Skill tag glow ── */
+.skill-tag {
+  box-shadow:
+    0 0 7px color-mix(in srgb, var(--tag-color, rgba(103,232,249,1)) 35%, transparent),
+    inset 0 0 6px color-mix(in srgb, var(--tag-color, rgba(103,232,249,1)) 12%, transparent);
+  border-color: color-mix(in srgb, var(--tag-color, rgba(103,232,249,1)) 30%, transparent) !important;
+}
+
+/* ── Outline button ── */
+.btn-outline {
+  border: 1px solid var(--btn-outline-border);
+  color: var(--btn-outline-text);
+}
+.btn-outline:hover {
+  border-color: var(--btn-outline-hover-border);
+  background: var(--card-bg);
+}
+
+/* ── Navbar (both themes) ── */
+.nav-glass {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* ── Scroll reveal ── */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Stagger card reveal ── */
+.stagger-card {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal-section.revealed .stagger-card { opacity: 1; transform: none; }
+.reveal-section.revealed .stagger-card[data-delay="1"] { transition-delay: 0.2s; }
+.reveal-section.revealed .stagger-card[data-delay="2"] { transition-delay: 0.35s; }
+.reveal-section.revealed .stagger-card[data-delay="3"] { transition-delay: 0.5s; }
+
+/* ── Animations ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50%       { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+@keyframes loader-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease forwards;
+  opacity: 0;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.25s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.55s; }
+
+.animate-float    { animation: float 5s ease-in-out infinite; }
+.animate-blob     { animation: blob 9s ease-in-out infinite; }
+.blob-delay       { animation-delay: 4s; }
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}

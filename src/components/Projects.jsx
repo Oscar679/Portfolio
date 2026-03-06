@@ -105,10 +105,10 @@ export default function Projects() {
               rel="noreferrer"
               style={{
                 opacity: visibleCount > i ? 1 : 0,
-                transition: 'opacity 0.5s ease, transform 0.5s ease',
+                transform: visibleCount > i ? 'translateX(0) scale(1)' : 'translateX(20px) scale(0.96)',
+                transition: 'opacity 0.45s ease, transform 0.45s ease',
                 transformStyle: 'preserve-3d',
                 willChange: 'transform',
-                ...(visibleCount <= i && { transform: 'translateY(20px) scale(0.97)' }),
               }}
               className="glass-card group flex flex-col p-6 rounded-2xl"
               onMouseMove={e => {

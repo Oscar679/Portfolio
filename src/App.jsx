@@ -7,14 +7,14 @@ import Contact from './components/Contact'
 import ScrollToTop from './components/ScrollToTop'
 import PageLoader from './components/PageLoader'
 import ScrollProgress from './components/ScrollProgress'
-import CursorSpotlight from './components/CursorSpotlight'
 import SectionDivider from './components/SectionDivider'
 import DotNav from './components/DotNav'
+import CustomCursor from './components/CustomCursor'
 
 export default function App() {
   return (
     <>
-      <CursorSpotlight />
+      <CustomCursor />
       <DotNav />
       <PageLoader />
       <ScrollProgress />

@@ -108,10 +108,10 @@ export default function About() {
     return () => timersRef.current.forEach(clearTimeout)
   }, [inView])
 
-  const bubbleStyle = (visible, dx = -14) => ({
+  const rowStyle = (visible) => ({
     opacity: visible ? 1 : 0,
-    transform: visible ? 'translateX(0) scale(1)' : `translateX(${dx}px) scale(0.96)`,
-    transition: 'opacity 0.4s ease, transform 0.4s ease',
+    transform: visible ? 'translateY(0)' : 'translateY(8px)',
+    transition: 'opacity 0.35s ease, transform 0.35s ease',
   })
 
   return (
@@ -135,25 +135,64 @@ export default function About() {
           ))}
         </div>
 
-        {/* Two-column bubbles */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 max-w-2xl mb-14">
-          <div className="flex flex-col gap-3">
-            <p className="text-faint text-xs font-mono uppercase tracking-widest mb-1">Background</p>
-            {story.map((text, i) => (
-              <div key={i} style={bubbleStyle(storyCount > i, -14)}
-                className="glass-card text-primary text-sm leading-relaxed px-4 py-2.5 rounded-2xl rounded-bl-sm w-fit">
-                {text}
-              </div>
-            ))}
+        {/* Two-column glass cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto mb-14">
+          {/* Background card */}
+          <div
+            className="glass-card rounded-2xl p-6 border-l-2 border-cyan-400/30"
+            style={{ opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(12px)', transition: 'opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s', transformStyle: 'preserve-3d', willChange: 'transform' }}
+            onMouseMove={e => {
+              const r = e.currentTarget.getBoundingClientRect()
+              const x = ((e.clientX - r.left) / r.width - 0.5) * 14
+              const y = ((e.clientY - r.top) / r.height - 0.5) * -14
+              e.currentTarget.style.transform = `perspective(700px) rotateX(${y}deg) rotateY(${x}deg) translateY(-4px)`
+              e.currentTarget.style.boxShadow = '0 0 0 1px #22d3ee33, 0 16px 40px #22d3ee22'
+              e.currentTarget.style.transition = 'box-shadow 0.15s ease'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateY(0)'
+              e.currentTarget.style.boxShadow = ''
+              e.currentTarget.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease'
+            }}
+          >
+            <p className="text-cyan-400/70 text-xs font-mono uppercase tracking-widest mb-5">Background</p>
+            <div className="flex flex-col gap-2">
+              {story.map((text, i) => (
+                <div key={i} style={rowStyle(storyCount > i)}
+                  className="bg-white/4 hover:bg-white/6 transition-colors rounded-xl px-3 py-2.5">
+                  <p className="text-primary text-sm leading-relaxed">{text}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-col gap-3">
-            <p className="text-faint text-xs font-mono uppercase tracking-widest mb-1">Skills</p>
-            {skills.map((text, i) => (
-              <div key={i} style={bubbleStyle(skillsCount > i, 14)}
-                className="glass-card text-primary text-sm leading-relaxed px-4 py-2.5 rounded-2xl rounded-br-sm w-fit">
-                {text}
-              </div>
-            ))}
+
+          {/* Skills card */}
+          <div
+            className="glass-card rounded-2xl p-6 border-l-2 border-violet-400/30"
+            style={{ opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(12px)', transition: 'opacity 0.5s ease 0.25s, transform 0.5s ease 0.25s', transformStyle: 'preserve-3d', willChange: 'transform' }}
+            onMouseMove={e => {
+              const r = e.currentTarget.getBoundingClientRect()
+              const x = ((e.clientX - r.left) / r.width - 0.5) * 14
+              const y = ((e.clientY - r.top) / r.height - 0.5) * -14
+              e.currentTarget.style.transform = `perspective(700px) rotateX(${y}deg) rotateY(${x}deg) translateY(-4px)`
+              e.currentTarget.style.boxShadow = '0 0 0 1px #a78bfa33, 0 16px 40px #a78bfa22'
+              e.currentTarget.style.transition = 'box-shadow 0.15s ease'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateY(0)'
+              e.currentTarget.style.boxShadow = ''
+              e.currentTarget.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease'
+            }}
+          >
+            <p className="text-violet-400/70 text-xs font-mono uppercase tracking-widest mb-5">Skills</p>
+            <div className="flex flex-col gap-2">
+              {skills.map((text, i) => (
+                <div key={i} style={rowStyle(skillsCount > i)}
+                  className="bg-white/4 hover:bg-white/6 transition-colors rounded-xl px-3 py-2.5">
+                  <p className="text-primary text-sm leading-relaxed">{text}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

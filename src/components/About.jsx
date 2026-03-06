@@ -22,7 +22,7 @@ const skills = [
 const stats = [
   { value: '134+', label: 'credits completed', color: '#22d3ee' },
   { value: '1', label: 'internship', color: '#2dd4bf' },
-  { value: '3+', label: 'projects built', color: '#60a5fa' },
+  { value: '5+', label: 'projects built', color: '#60a5fa' },
   { value: '2+', label: 'years coding', color: '#a78bfa' },
 ]
 

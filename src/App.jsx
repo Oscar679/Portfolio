@@ -7,17 +7,25 @@ import Contact from './components/Contact'
 import ScrollToTop from './components/ScrollToTop'
 import PageLoader from './components/PageLoader'
 import ScrollProgress from './components/ScrollProgress'
+import CursorSpotlight from './components/CursorSpotlight'
+import SectionDivider from './components/SectionDivider'
+import DotNav from './components/DotNav'
 
 export default function App() {
   return (
     <>
+      <CursorSpotlight />
+      <DotNav />
       <PageLoader />
       <ScrollProgress />
       <div className="site-root min-h-screen">
         <Navbar />
         <Hero />
+        <SectionDivider />
         <About />
+        <SectionDivider />
         <Projects />
+        <SectionDivider />
         <Contact />
         <ScrollToTop />
       </div>

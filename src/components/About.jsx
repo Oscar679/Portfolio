@@ -1,126 +1,162 @@
-import { FaReact, FaAws, FaDocker, FaPython, FaGitAlt, FaJava, FaLinux } from 'react-icons/fa'
-import { SiPhp, SiMysql, SiPostgresql, SiSupabase, SiTailwindcss, SiJavascript, SiGithubactions, SiHtml5, SiPulumi, SiTensorflow } from 'react-icons/si'
-import useScrollReveal from '../hooks/useScrollReveal'
+import { useEffect, useRef, useState } from 'react'
+import ScrambleText from './ScrambleText'
 
-const K = ({ children }) => (
-  <span className="text-cyan-400 font-medium">{children}</span>
-)
-
-const iconMap = {
-  'PHP (Slim 4)':       { icon: SiPhp, color: '#777BB4' },
-  'Java':               { icon: FaJava, color: '#ED8B00' },
-  'React':              { icon: FaReact, color: '#61DAFB' },
-  'JavaScript':         { icon: SiJavascript, color: '#F7DF1E' },
-  'Tailwind':           { icon: SiTailwindcss, color: '#06B6D4' },
-  'HTML/CSS':           { icon: SiHtml5, color: '#E34F26' },
-  'MySQL':              { icon: SiMysql, color: '#4479A1' },
-  'PostgreSQL':         { icon: SiPostgresql, color: '#336791' },
-  'Supabase':           { icon: SiSupabase, color: '#3ECF8E' },
-  'Docker':             { icon: FaDocker, color: '#2496ED' },
-  'AWS App Runner':     { icon: FaAws, color: '#FF9900' },
-  'GitHub Actions':     { icon: SiGithubactions, color: '#2088FF' },
-  'Pulumi':             { icon: SiPulumi, color: '#8A3391' },
-  'Deep Learning (LSTM)': { icon: SiTensorflow, color: '#FF6F00' },
-  'Python':             { icon: FaPython, color: '#3776AB' },
-  'Git':                { icon: FaGitAlt, color: '#F05032' },
-  'Linux':              { icon: FaLinux, color: '#FCC624' },
-}
-
-const skills = [
-  { category: 'Backend', items: ['PHP (Slim 4)', 'Java', 'REST APIs'] },
-  { category: 'Frontend', items: ['React', 'JavaScript', 'Tailwind', 'HTML/CSS'] },
-  { category: 'Databases', items: ['MySQL', 'PostgreSQL', 'Supabase', 'Oracle'] },
-  { category: 'Cloud & DevOps', items: ['AWS App Runner', 'GitHub Actions', 'Pulumi', 'Docker'] },
-  { category: 'Other', items: ['Deep Learning (LSTM)', 'Python', 'Git', 'Linux'] },
+const story = [
+  "👋 I'm Oscar — curious developer based in Växjö, Sweden.",
+  "🎓 Linnéuniversitetet · Interactive Media & Web Technologies",
+  "📚 134+ hp — backend, cloud, ML & interactive media.",
+  "💼 Backend / DevOps Intern at Videntic.",
+  "☁️ AWS App Runner & Lambda · Pulumi IaC.",
+  "🔄 CI/CD — GitHub Actions · Docker · Secrets management.",
+  "🗄️ Refactored Supabase / PostgreSQL database structure.",
 ]
 
-export default function About() {
-  const ref = useScrollReveal()
+const skills = [
+  "⚙️ Backend: PHP (Slim 4) · Java · REST APIs",
+  "🖥️ Frontend: React · JavaScript · Tailwind",
+  "☁️ Cloud: AWS · Docker · GitHub Actions · Pulumi",
+  "🗄️ DBs: MySQL · PostgreSQL · Supabase · Oracle",
+  "🤖 Other: Deep Learning (LSTM) · Python · Git · Linux",
+]
+
+const stats = [
+  { value: '134+', label: 'credits completed', color: '#22d3ee' },
+  { value: '1', label: 'internship', color: '#2dd4bf' },
+  { value: '3+', label: 'projects built', color: '#60a5fa' },
+  { value: '2+', label: 'years coding', color: '#a78bfa' },
+]
+
+
+function StatCounter({ value, label, color = '#22d3ee' }) {
+  const num = parseInt(value)
+  const suffix = value.replace(/[0-9]/g, '')
+  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        observer.disconnect()
+        const duration = 1400
+        const start = performance.now()
+        let raf
+        const step = (now) => {
+          const t = Math.min(1, (now - start) / duration)
+          const eased = 1 - Math.pow(1 - t, 3)
+          setCount(Math.round(eased * num))
+          if (t < 1) raf = requestAnimationFrame(step)
+        }
+        raf = requestAnimationFrame(step)
+      },
+      { threshold: 0.6 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [num])
 
   return (
-    <section id="about" ref={ref} className="reveal-section py-32 px-6 max-w-5xl mx-auto">
-      <p className="text-cyan-400 text-sm font-mono mb-3"><span className="text-faint">// </span>about.tsx</p>
-      <h2 className="text-4xl md:text-5xl font-bold mb-12">Who I am</h2>
+    <div ref={ref} className="glass-card px-5 py-4 rounded-2xl text-center">
+      <p className="text-2xl font-bold mb-1 tabular-nums" style={{ color }}>{count}{suffix}</p>
+      <p className="text-faint text-xs">{label}</p>
+    </div>
+  )
+}
 
-      <div className="grid md:grid-cols-2 gap-8 mb-16">
-        <div className="glass-card stagger-card p-8 rounded-2xl" data-delay="1">
-          <p className="text-muted leading-relaxed mb-4">
-            Curious and driven developer based in <span className="text-primary">Växjö, Sweden</span>, with a strong interest in backend systems, cloud environments, and data-driven applications.
-          </p>
-          <p className="text-muted leading-relaxed">
-            I enjoy understanding how systems fit together — from database design to cloud infrastructure — and I'm motivated by building solutions that are both technically robust and practically useful.
-          </p>
+export default function About() {
+  const sectionRef = useRef(null)
+  const [inView, setInView] = useState(false)
+  const [storyCount, setStoryCount] = useState(0)
+  const [skillsCount, setSkillsCount] = useState(0)
+  const timersRef = useRef([])
+  const triggeredRef = useRef(false)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    let rafId
+    const update = () => {
+      const rect = section.getBoundingClientRect()
+      const vh = window.innerHeight
+      const visiblePx = Math.max(0, Math.min(rect.bottom, vh) - Math.max(rect.top, 0))
+      const ratio = Math.min(1, visiblePx / vh)
+      const t = Math.pow(1 - ratio, 2)
+      section.style.opacity = ratio < 1 ? String(Math.min(1, ratio * 1.2)) : '1'
+      section.style.filter = t > 0 ? `blur(${t * 4}px)` : ''
+      if (ratio > 0.15 && !triggeredRef.current) { triggeredRef.current = true; setInView(true) }
+    }
+    const onScroll = () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    update()
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
+  }, [])
+
+  useEffect(() => {
+    if (!inView) return
+    timersRef.current.forEach(clearTimeout)
+    timersRef.current = []
+    story.forEach((_, i) => {
+      const t = setTimeout(() => setStoryCount(i + 1), i * 280 + 200)
+      timersRef.current.push(t)
+    })
+    skills.forEach((_, i) => {
+      const t = setTimeout(() => setSkillsCount(i + 1), i * 280 + 400)
+      timersRef.current.push(t)
+    })
+    return () => timersRef.current.forEach(clearTimeout)
+  }, [inView])
+
+  const bubbleStyle = (visible, dx = -14) => ({
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateX(0) scale(1)' : `translateX(${dx}px) scale(0.96)`,
+    transition: 'opacity 0.4s ease, transform 0.4s ease',
+  })
+
+  return (
+    <section
+      id="about"
+      ref={sectionRef}
+      className="relative py-32 px-6 overflow-hidden min-h-screen"
+      style={{ background: 'radial-gradient(ellipse at 85% 40%, rgba(6,182,212,0.10) 0%, transparent 55%), radial-gradient(ellipse at 10% 80%, rgba(96,165,250,0.06) 0%, transparent 50%)' }}
+    >
+      <div className="relative z-10 max-w-5xl mx-auto">
+        <p className="text-cyan-400 text-sm font-mono mb-3"><span className="text-faint">// </span>about.tsx<span className="cursor-blink ml-0.5">▋</span></p>
+        <ScrambleText as="h2" text="Who I am" className="text-4xl md:text-5xl font-bold mb-10" style={{ background: 'linear-gradient(90deg, #fff 0%, #22d3ee 60%, #60a5fa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }} />
+
+        {/* Stats strip */}
+        <div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-14"
+          style={{ opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(12px)', transition: 'opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s' }}
+        >
+          {stats.map(({ value, label, color }) => (
+            <StatCounter key={label} value={value} label={label} color={color} />
+          ))}
         </div>
 
-        <div className="glass-card stagger-card p-8 rounded-2xl" data-delay="2">
-          <h3 className="text-primary font-semibold mb-4">Experience</h3>
-          <div className="border-l-2 border-cyan-500/40 pl-4">
-            <p className="text-cyan-400 text-sm font-mono mb-1">Backend / DevOps Intern</p>
-            <p className="text-primary font-medium mb-2">Videntic</p>
-            <p className="text-muted text-sm leading-relaxed">
-              Worked on a cloud-based web platform handling backend development and DevOps. Refactored <K>Supabase</K>/<K>PostgreSQL</K> database structure for better data modeling and maintainability. Deployed and managed backend services on <K>AWS App Runner</K> and <K>Lambda</K>.
-            </p>
-            <p className="text-muted text-sm leading-relaxed mt-2">
-              Set up and maintained <K>CI/CD pipelines</K> with <K>GitHub Actions</K> — automated <K>Docker</K> builds, deployments, and environment management. Managed cloud infrastructure with <K>Pulumi</K> (<K>TypeScript</K>) IaC, branching strategies, staging environments, and secrets management.
-            </p>
+        {/* Two-column bubbles */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 max-w-2xl mb-14">
+          <div className="flex flex-col gap-3">
+            <p className="text-faint text-xs font-mono uppercase tracking-widest mb-1">Background</p>
+            {story.map((text, i) => (
+              <div key={i} style={bubbleStyle(storyCount > i, -14)}
+                className="glass-card text-primary text-sm leading-relaxed px-4 py-2.5 rounded-2xl rounded-bl-sm w-fit">
+                {text}
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            <p className="text-faint text-xs font-mono uppercase tracking-widest mb-1">Skills</p>
+            {skills.map((text, i) => (
+              <div key={i} style={bubbleStyle(skillsCount > i, 14)}
+                className="glass-card text-primary text-sm leading-relaxed px-4 py-2.5 rounded-2xl rounded-br-sm w-fit">
+                {text}
+              </div>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* Education card */}
-      <div className="glass-card stagger-card p-8 rounded-2xl mb-16" data-delay="3">
-        <h3 className="text-primary font-semibold mb-6">Education</h3>
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="border-l-2 border-cyan-500/40 pl-4">
-            <p className="text-cyan-400 text-sm font-mono mb-1">2023 — present</p>
-            <p className="text-primary font-medium mb-1">Linnéuniversitetet</p>
-            <p className="text-muted text-sm mb-3">Interaktiva medier och webbteknologier</p>
-            <p className="text-muted text-sm leading-relaxed">
-              A broad programme covering web development, system design, databases, cloud computing, and interactive media. Completed <K>134+ hp</K> with coursework spanning backend, frontend, DevOps, and machine learning.
-            </p>
-          </div>
-          <a
-            href="https://www.linkedin.com/in/oscar-ekberg-127833250/details/courses/"
-            target="_blank"
-            rel="noreferrer"
-            className="btn-outline text-sm px-4 py-2 rounded-full whitespace-nowrap self-start transition-all hover:border-cyan-400/60 hover:text-cyan-400"
-          >
-            Full course list →
-          </a>
-        </div>
-      </div>
-
-      {/* Skills with icons */}
-      <div className="space-y-5">
-        {skills.map(({ category, items }) => (
-          <div key={category} className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-muted text-sm font-mono w-36 shrink-0 opacity-50">{category}</span>
-            <div className="flex flex-wrap gap-2">
-              {items.map(skill => {
-                const entry = iconMap[skill]
-                return (
-                  <span
-                    key={skill}
-                    className="tag skill-tag flex items-center gap-1.5 px-3 py-1 rounded-full text-sm transition-all duration-200"
-                    style={{ '--tag-color': entry?.color ?? 'rgb(103,232,249)' }}
-                    onMouseEnter={e => {
-                      const c = entry?.color ?? 'rgb(103,232,249)'
-                      e.currentTarget.style.borderColor = c + '66'
-                      e.currentTarget.style.color = c
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = ''
-                      e.currentTarget.style.color = ''
-                    }}
-                  >
-                    {entry && <entry.icon size={12} style={{ color: entry.color }} className="opacity-80 shrink-0" />}
-                    {skill}
-                  </span>
-                )
-              })}
-            </div>
-          </div>
-        ))}
       </div>
     </section>
   )

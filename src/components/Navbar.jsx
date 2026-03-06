@@ -33,9 +33,10 @@ export default function Navbar() {
             <a
               key={l}
               href={`#${l.toLowerCase()}`}
-              className={`transition-colors hover:text-cyan-400 ${active === l.toLowerCase() ? 'text-cyan-400' : ''}`}
+              className={`relative transition-colors hover:text-cyan-400 ${active === l.toLowerCase() ? 'text-cyan-400' : ''}`}
             >
               {l}
+              <span className={`absolute -bottom-1 left-0 w-full h-px bg-cyan-400 transition-transform duration-300 origin-left ${active === l.toLowerCase() ? 'scale-x-100' : 'scale-x-0'}`} />
             </a>
           ))}
         </div>
@@ -65,7 +66,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile menu */}
-      <div className={`fixed inset-x-0 top-[57px] z-40 bg-black/40 backdrop-blur-md border-t border-card transition-all duration-300 md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
+      <div className={`fixed inset-x-0 top-[57px] z-40 mobile-menu border-t border-card transition-all duration-300 md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
         <div className="flex flex-col px-6 py-5 gap-5">
           {links.map(l => (
             <a

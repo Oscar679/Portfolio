@@ -107,7 +107,7 @@ export default function ParticleCanvas() {
     }
     const onMouseLeave = () => { pointer = { x: null, y: null } }
 
-    // Touch events (passive — won't block scroll)
+    // Touch events are passive so they do not block scroll.
     const onTouchMove = (e) => {
       const rect = canvas.getBoundingClientRect()
       const t = e.touches[0]
@@ -125,18 +125,19 @@ export default function ParticleCanvas() {
     drawParticles()
 
     let lastWidth = width
-    window.addEventListener("resize", () => {
+    const onResize = () => {
       const newWidth = canvas.getBoundingClientRect().width
       resize()
       if (Math.abs(newWidth - lastWidth) > 10) {
         createParticles()
         lastWidth = newWidth
       }
-    })
+    }
+    window.addEventListener("resize", onResize)
 
     return () => {
       cancelAnimationFrame(animationFrame)
-      window.removeEventListener("resize", resize)
+      window.removeEventListener("resize", onResize)
       section.removeEventListener('mousemove', onMouseMove)
       section.removeEventListener('mouseleave', onMouseLeave)
       section.removeEventListener('touchmove', onTouchMove)

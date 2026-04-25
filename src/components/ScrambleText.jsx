@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { createElement, useEffect, useRef, useState } from 'react'
 
 const CHARS = '!<>-_\\/[]{}=+*^?#@ABCDEFGHIJKLabcdefghijkl0123456789'
 
@@ -37,5 +37,5 @@ export default function ScrambleText({ text, as: Tag = 'span', className, style 
     return () => observer.disconnect()
   }, [text])
 
-  return <Tag ref={ref} className={className} style={style}>{output}</Tag>
+  return createElement(Tag, { ref, className, style }, output)
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { FaBars, FaGithub, FaTimes } from 'react-icons/fa'
 
 const links = ['About', 'Projects', 'Contact']
 
@@ -22,68 +23,76 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between backdrop-blur-md nav-glass">
-        <span className="text-lg font-bold tracking-tight text-primary">
-          Oscar<span className="text-cyan-400">.</span>
-        </span>
+      <nav className="fixed top-0 z-50 flex w-full items-center justify-between px-4 py-3 backdrop-blur-md nav-glass sm:px-6">
+        <a href="#" className="group inline-flex items-center gap-3" aria-label="Oscar Ekberg home">
+          <span className="grid h-9 w-9 place-items-center rounded-lg border border-cyan-300/25 bg-cyan-300/10 font-mono text-sm font-bold text-cyan-200 transition-colors group-hover:border-cyan-200/60">
+            OE
+          </span>
+          <span className="hidden text-sm font-semibold text-primary sm:block">
+            Oscar Ekberg
+          </span>
+        </a>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex gap-8 text-sm text-muted">
-          {links.map(l => (
-            <a
-              key={l}
-              href={`#${l.toLowerCase()}`}
-              className={`relative transition-colors hover:text-cyan-400 ${active === l.toLowerCase() ? 'text-cyan-400' : ''}`}
-            >
-              {l}
-              <span className={`absolute -bottom-1 left-0 w-full h-px bg-cyan-400 transition-transform duration-300 origin-left ${active === l.toLowerCase() ? 'scale-x-100' : 'scale-x-0'}`} />
-            </a>
-          ))}
+        <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1 text-sm text-muted md:flex">
+          {links.map(l => {
+            const id = l.toLowerCase()
+            const isActive = active === id
+            return (
+              <a
+                key={l}
+                href={`#${id}`}
+                className={`rounded-full px-4 py-2 transition-all hover:text-cyan-200 ${isActive ? 'bg-cyan-300/[0.12] text-cyan-200 shadow-[0_0_18px_rgba(62,231,244,0.12)]' : ''}`}
+              >
+                {l}
+              </a>
+            )
+          })}
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Desktop GitHub */}
           <a
             href="https://github.com/Oscar679"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:block btn-outline text-sm px-4 py-2 rounded-full transition-all hover:border-cyan-400/60 hover:text-cyan-400"
+            className="btn-outline hidden items-center gap-2 rounded-full px-4 py-2 text-sm transition-all hover:border-cyan-300/60 md:inline-flex"
           >
+            <FaGithub size={14} aria-hidden="true" />
             GitHub
           </a>
 
-          {/* Mobile hamburger */}
           <button
-            className="md:hidden flex flex-col gap-1.5 p-2 text-muted hover:text-cyan-400 transition-colors cursor-pointer"
+            className="grid h-10 w-10 place-items-center rounded-lg border border-white/10 bg-white/[0.04] text-muted transition-colors hover:border-cyan-300/40 hover:text-cyan-200 md:hidden"
             onClick={() => setMenuOpen(o => !o)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
-            <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-            <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            {menuOpen ? <FaTimes size={16} aria-hidden="true" /> : <FaBars size={16} aria-hidden="true" />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <div className={`fixed inset-x-0 top-[57px] z-40 mobile-menu border-t border-card transition-all duration-300 md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
-        <div className="flex flex-col px-6 py-5 gap-5">
-          {links.map(l => (
-            <a
-              key={l}
-              href={`#${l.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              className={`text-sm transition-colors hover:text-cyan-400 ${active === l.toLowerCase() ? 'text-cyan-400' : 'text-muted'}`}
-            >
-              {l}
-            </a>
-          ))}
+      <div className={`fixed inset-x-0 top-[65px] z-40 border-t border-card mobile-menu transition-all duration-300 md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
+        <div className="flex flex-col gap-2 px-4 py-4">
+          {links.map(l => {
+            const id = l.toLowerCase()
+            return (
+              <a
+                key={l}
+                href={`#${id}`}
+                onClick={() => setMenuOpen(false)}
+                className={`rounded-lg px-3 py-3 text-sm transition-colors hover:bg-white/[0.05] hover:text-cyan-200 ${active === id ? 'bg-cyan-300/10 text-cyan-200' : 'text-muted'}`}
+              >
+                {l}
+              </a>
+            )
+          })}
           <a
             href="https://github.com/Oscar679"
             target="_blank"
             rel="noreferrer"
-            className="btn-outline text-sm px-4 py-2 rounded-full transition-all hover:border-cyan-400/60 hover:text-cyan-400 text-center"
+            className="btn-outline mt-2 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm transition-all hover:border-cyan-300/60 hover:text-cyan-200"
           >
+            <FaGithub size={14} aria-hidden="true" />
             GitHub
           </a>
         </div>

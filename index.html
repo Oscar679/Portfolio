@@ -3,8 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>oscarekberg</title>
+    <meta name="description" content="Portfolio for Oscar Ekberg, a backend developer and DevOps engineer in Växjö focused on cloud, databases, and reliable software delivery." />
+    <title>Oscar Ekberg | Backend Developer and DevOps Engineer</title>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations?.().then((registrations) => {
+          registrations.forEach((registration) => registration.unregister())
+        })
+      }
+
+      if ('caches' in window) {
+        caches.keys?.().then((keys) => {
+          keys.forEach((key) => caches.delete(key))
+        })
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

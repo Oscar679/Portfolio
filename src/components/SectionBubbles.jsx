@@ -31,11 +31,13 @@ export default function SectionBubbles({ messages, side = 'right' }) {
   }, [messages])
 
   const dx = side === 'right' ? '16px' : '-16px'
+  const alignment = side === 'right' ? 'items-end right-6' : 'items-start left-6'
+  const bubbleTail = side === 'right' ? 'rounded-br-sm' : 'rounded-bl-sm'
 
   return (
     <div
       ref={ref}
-      className={`hidden xl:flex flex-col gap-3 items-${side === 'right' ? 'end' : 'start'} pointer-events-none absolute ${side === 'right' ? 'right-6' : 'left-6'} top-1/2 -translate-y-1/2 max-w-[210px]`}
+      className={`pointer-events-none absolute top-1/2 hidden max-w-[210px] -translate-y-1/2 flex-col gap-3 xl:flex ${alignment}`}
     >
       {messages.map((text, i) => (
         <div
@@ -47,7 +49,7 @@ export default function SectionBubbles({ messages, side = 'right' }) {
               : `translateX(${dx}) scale(0.95)`,
             transition: 'opacity 0.4s ease, transform 0.4s ease',
           }}
-          className={`glass-card text-primary text-xs leading-relaxed px-3.5 py-2 rounded-2xl ${side === 'right' ? 'rounded-br-sm' : 'rounded-bl-sm'}`}
+          className={`glass-card rounded-lg px-3.5 py-2 text-xs leading-relaxed text-primary ${bubbleTail}`}
         >
           {text}
         </div>

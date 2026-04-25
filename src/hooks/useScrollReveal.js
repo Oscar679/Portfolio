@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 
 export default function useScrollReveal(options = {}) {
   const ref = useRef(null)
+  const { root = null, rootMargin = '0px', threshold = 0.15 } = options
 
   useEffect(() => {
     const el = ref.current
@@ -12,11 +13,11 @@ export default function useScrollReveal(options = {}) {
         el.classList.add('revealed')
         observer.unobserve(el)
       }
-    }, { threshold: 0.15, ...options })
+    }, { root, rootMargin, threshold })
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [root, rootMargin, threshold])
 
   return ref
 }

@@ -1,48 +1,38 @@
-# Oscar Ekberg Portfolio
+# Oscar Ekberg’s portfolio
 
-Personal portfolio website for Oscar Ekberg, a backend developer and DevOps engineer based in Växjö, Sweden. Built with React and Vite, featuring a dark systems-inspired interface, a lightweight shader-driven hero, motion details, project cards, and contact flows.
-
-## Live Site
+A personal portfolio built with React and Vite. A short introduction, my work at Columbus, real project previews, and a little background on my work in backend development and DevOps.
 
 [oscarekberg.com](https://oscarekberg.com)
 
-## Features
-
-- Lightweight animated shader background in the hero
-- Systems/HUD visual language with scan lines, corner brackets, and compact glass surfaces
-- Typewriter hero copy and scrambled section headings
-- Scroll-gated hero cards that reveal before page scrolling continues
-- Current TerraTactics game project highlight
-- Animated stat counters and staggered content reveals
-- Project cards with accent rails, tilt interaction, and repository links
-- Tech stack matrix with brand icons
-- Contact links with copy-to-clipboard email feedback
-- Scroll progress indicator, dot navigation, and scroll-to-top control
-- Responsive layout across mobile and desktop
-
-## Tech Stack
-
-- React 19 + Vite 7
-- Tailwind CSS v4
-- Three.js shader background
-- lucide-react
-- react-icons
-- framer-motion available for future motion work
-
-## Getting Started
+## Development
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-## Build & Deploy
-
 ```bash
+npm run lint
 npm run build
+npm run preview
 ```
 
-Deploy to Vercel or Netlify:
+Deploy the generated `dist` directory. The site uses root-relative asset paths and is intended to be hosted at the domain root.
 
-- Build command: `npm run build`
-- Publish directory: `dist`
+## Editing the site
+
+- `src/App.jsx`: introduction, project links, background, and contact details.
+- `src/index.css`: layout, typography, colors, and responsive styles.
+- `public/images`: optimized WebP project previews and portrait.
+- `index.html` and `public/manifest.webmanifest`: page metadata and browser theme.
+
+The page includes keyboard navigation, a skip link, reduced-motion support, and email copying with success and failure feedback. Fonts and project images are served locally.
+
+## Image sources
+
+- Portrait: [my public GitHub profile](https://github.com/Oscar679).
+- TerraTactics: gameplay captured from [the project](https://github.com/Oscar679/TerraTactics).
+- ClimateBot: the prototype photo from [`static/img/fullSetup.jpg`](https://github.com/Oscar679/iot_project/blob/main/static/img/fullSetup.jpg).
+- GeoGuessr Clone: a screenshot of [the live project](https://melab.lnu.se/~oe222ia/1me326/).
+
+Familjen Grotesk is self-hosted under the SIL Open Font License; see `public/fonts/OFL.txt`.

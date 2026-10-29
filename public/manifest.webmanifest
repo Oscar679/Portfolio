@@ -5,12 +5,12 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#07090d",
-  "theme_color": "#07090d",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "/favicon.svg",
-      "sizes": "32x32",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     }
